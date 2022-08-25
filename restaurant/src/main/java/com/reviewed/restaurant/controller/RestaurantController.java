@@ -1,8 +1,11 @@
 package com.reviewed.restaurant.controller;
 
+import com.reviewed.restaurant.dto.RestaurantDTO;
 import com.reviewed.restaurant.model.Restaurant;
 import com.reviewed.restaurant.service.impl.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +18,9 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @GetMapping(value = "/{id}")
-    public Restaurant getRestaurant(@PathVariable(name = "id") Integer id) {
-        return restaurantService.getRestaurantById(id);
+    public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable(name = "id") Integer id) {
+        RestaurantDTO restaurantDTO = restaurantService.getRestaurantById(id);
+        return new ResponseEntity<>(restaurantDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/")
@@ -25,25 +29,25 @@ public class RestaurantController {
     }
 
     @PostMapping(value = "/")
-    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.addRestaurant(restaurant);
+    public ResponseEntity<RestaurantDTO> addRestaurant(@RequestBody Restaurant restaurant) {
+        return new ResponseEntity<>(restaurantService.addRestaurant(restaurant), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public Restaurant updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable(name = "id") Integer id) {
-        return restaurantService.updateRestaurantById(restaurant, id);
+    public ResponseEntity<RestaurantDTO> updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable(name = "id") Integer id) {
+        return new ResponseEntity<>(restaurantService.updateRestaurantById(restaurant, id), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public String deleteRestaurant(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable(name = "id") Integer id) {
         restaurantService.deleteRestaurantById(id);
-        return "Restaurant with id = " + id + " deleted.";
+        return new ResponseEntity<>("Restaurant with id = " + id + " deleted successfully.", HttpStatus.OK) ;
     }
 
     @DeleteMapping(value = "/")
-    public String deleteRestaurants() {
+    public ResponseEntity<String> deleteAllRestaurants() {
         restaurantService.deleteAllRestaurants();
-        return "Deleted all restaurants.";
+        return ResponseEntity.ok("All restaurants deleted successfully.");
     }
 
 }

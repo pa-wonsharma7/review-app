@@ -4,13 +4,19 @@ import com.reviewed.restaurant.enums.Cuisine;
 import com.reviewed.restaurant.enums.Type;
 import com.reviewed.restaurant.model.Address;
 import com.reviewed.restaurant.model.RestaurantRating;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class RestaurantDTO {
 
-    private String restaurantId;
+    private Integer restaurantId;
 
     private String restaurantName;
 
