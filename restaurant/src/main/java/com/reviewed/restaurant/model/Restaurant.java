@@ -1,8 +1,16 @@
 package com.reviewed.restaurant.model;
 
-import lombok.*;
+import com.reviewed.restaurant.enums.Category;
+import com.reviewed.restaurant.enums.Cuisine;
+import com.reviewed.restaurant.enums.Type;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,6 +34,11 @@ public class Restaurant {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @ElementCollection
+    @JoinTable(name = "Cuisine", joinColumns = @JoinColumn(name = "restaurant_id"))
     @Enumerated(EnumType.STRING)
-    private Cuisine cuisine;
+    private Set<Cuisine> cuisines = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 }

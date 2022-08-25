@@ -2,11 +2,8 @@ package com.reviewed.restaurant.model;
 
 import lombok.*;
 
-import javax.persistence.Embeddable;
-
 @Getter
 @Setter
-@Embeddable
 public class Address {
 
     private String addressLine;
@@ -17,7 +14,7 @@ public class Address {
 
     private String city;
 
-    private String country;
+    private String state;
 
     private Integer postalCode;
 }

@@ -1,6 +1,0 @@
-package com.reviewed.restaurant.model;
-
-public enum Cuisine {
-    SOUTH_INDIAN, CHINESE, ITALIAN, NORTH_INDIAN, FAST_FOOD, DESSERTS, BAKERY,
-    MUGHLAI, SHAKES, MITHAI, SICHUAN, CONTINENTAL, FRENCH, JAPANESE;
-}

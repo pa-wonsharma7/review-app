@@ -1,10 +1,12 @@
-package com.reviewed.restaurant.service;
+package com.reviewed.restaurant.service.impl;
 
 import com.reviewed.restaurant.model.Restaurant;
 
 import java.util.List;
 
 public interface RestaurantService {
+
+    Restaurant getRestaurantById(Integer id);
 
     Restaurant addRestaurant(Restaurant restaurant);
 

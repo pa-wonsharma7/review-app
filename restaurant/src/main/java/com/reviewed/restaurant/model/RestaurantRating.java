@@ -12,11 +12,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class RestaurantRating {
 
-    private Integer food;
+    private Double food;
 
-    private Integer ambience;
+    private Double ambience;
 
-    private Integer hygiene;
+    private Double hygiene;
 
-    private Integer staffBehaviour;
+    private Double staffBehaviour;
 }
