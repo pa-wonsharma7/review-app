@@ -90,13 +90,19 @@ public class ReviewController {
      * @param pageNo
      * @param pageSize
      * @param restaurantId
+     * @param sortField
      * @return ResponseEntity<ReviewPageDto>
      */
-    @GetMapping(value = "/fetch-review/{restaurantId}")
-    public  ResponseEntity<ReviewPageDto> getReviewByRestaurantId(@PathVariable(name = "pageNo") int pageNo, @PathVariable(name = "pageSize") int pageSize,@PathVariable(name = "restaurantId") Integer restaurantId ){
+    @GetMapping(value = "/fetch-review/restaurant")
+    public  ResponseEntity<ReviewPageDto> getReviewByRestaurantId(
+            @RequestParam(required = true) Integer restaurantId,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "25") int pageSize,
+            @RequestParam(defaultValue = "lastUpdatedDateTime") String sortField
+           ){
         ReviewPageDto reviewRes = new ReviewPageDto();
         try {
-            reviewRes = reviewService.fetchReviewByRestaurantId(pageNo,pageSize,restaurantId);
+            reviewRes = reviewService.fetchReviewByRestaurantId(pageNo,pageSize,sortField,restaurantId);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -109,13 +115,19 @@ public class ReviewController {
      * @param userId
      * @param pageNo
      * @param pageSize
+     * @param sortField
      * @return ResponseEntity<ReviewPageDto>
      */
-    @GetMapping(value = "/fetch-review/{pageNo}/{pageSize}/{userId}")
-    public  ResponseEntity<ReviewPageDto> getReviewByUserId(@PathVariable(name = "pageNo") int pageNo, @PathVariable(name = "pageSize") int pageSize, @PathVariable(name = "userId") Integer userId ){
+    @GetMapping(value = "/fetch-review/user")
+    public  ResponseEntity<ReviewPageDto> getReviewByUserId(
+            @RequestParam(required = true) Integer userId,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "3") int pageSize,
+            @RequestParam(defaultValue = "lastUpdatedDateTime") String sortField
+    ){
         ReviewPageDto reviewRes = new ReviewPageDto();
         try {
-            reviewRes = reviewService.fetchReviewByUserId(pageNo,pageSize,userId);
+            reviewRes = reviewService.fetchReviewByUserId(pageNo,pageSize,sortField,userId);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -129,8 +141,11 @@ public class ReviewController {
      * @param restaurantId
      * @return ResponseEntity<Review>
      */
-    @GetMapping(value = "/fetch-review/{restaurantId}/{userId}")
-    public  ResponseEntity<Review> getReviewByUserIdAndRestaurantId(@PathVariable(name = "userId") Integer userId, @PathVariable(name = "restaurantId") Integer restaurantId){
+    @GetMapping(value = "/fetch-review/user-rest")
+    public  ResponseEntity<Review> getReviewByUserIdAndRestaurantId(
+            @RequestParam(required = true) Integer userId,
+            @RequestParam(required = true) Integer restaurantId
+            ){
         Review reviewRes = new Review();
         try {
             reviewRes = reviewService.fetchReviewByUserIdAndRestaurantId(userId,restaurantId);

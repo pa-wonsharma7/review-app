@@ -95,17 +95,20 @@ public class ReviewServiceImpl implements ReviewService{
      * @param pageNo
      * @param pageSize
      * @param restaurantId
+     * @param sortField
      * @return ReviewPageDto
      */
     @Override
-    public ReviewPageDto fetchReviewByRestaurantId(int pageNo, int pageSize, Integer restaurantId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Review> reviews = reviewRepository.findAll(pageable);
+    public ReviewPageDto fetchReviewByRestaurantId(int pageNo, int pageSize, String sortField, Integer restaurantId) {
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Review> reviews = reviewRepository.findByRestaurantId(restaurantId,pageable);
         ReviewPageDto reviewPageDto = new ReviewPageDto();
         reviewPageDto.setContent(reviews.getContent());
         reviewPageDto.setTotalElements(reviews.getTotalElements());
         return reviewPageDto;
     }
+
 
     /**
      * Service method for fetching reviews given by a user based on user Id
@@ -113,12 +116,14 @@ public class ReviewServiceImpl implements ReviewService{
      * @param pageNo
      * @param pageSize
      * @param userId
+     * @param sortField
      * @return ReviewPageDto
      */
     @Override
-    public ReviewPageDto fetchReviewByUserId(int pageNo, int pageSize, Integer userId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Review> reviews = reviewRepository.findAll(pageable);
+    public ReviewPageDto fetchReviewByUserId(int pageNo, int pageSize, String sortField, Integer userId) {
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Review> reviews = reviewRepository.findByUserId(userId,pageable);
         ReviewPageDto reviewPageDto = new ReviewPageDto();
         reviewPageDto.setContent(reviews.getContent());
         reviewPageDto.setTotalElements(reviews.getTotalElements());

@@ -47,9 +47,10 @@ public interface ReviewService {
      * @param pageNo
      * @param pageSize
      * @param restaurantId
+     * @param sortField
      * @return ReviewPageDto
      */
-    public ReviewPageDto fetchReviewByRestaurantId (int pageNo,int pageSize, Integer restaurantId);
+    public ReviewPageDto fetchReviewByRestaurantId (int pageNo,int pageSize,String sortField, Integer restaurantId);
 
     /**
      * Service method for fetching reviews given by a user based on user Id
@@ -57,9 +58,10 @@ public interface ReviewService {
      * @param pageNo
      * @param pageSize
      * @param userId
+     * @param sortField
      * @return ReviewPageDto
      */
-    public ReviewPageDto fetchReviewByUserId(int pageNo,int pageSize,Integer userId);
+    public ReviewPageDto fetchReviewByUserId(int pageNo,int pageSize,String sortField, Integer userId);
 
     /**
      * Service method for fetching reviews for a particular restaurant and a user based on restaurant Id and user Id
