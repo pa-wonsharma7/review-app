@@ -1,5 +1,6 @@
 package com.reviewed.review.controller;
 
+import com.reviewed.review.dto.ReviewPageDto;
 import com.reviewed.review.model.Review;
 import com.reviewed.review.service.ReviewService;
 
@@ -77,6 +78,62 @@ public class ReviewController {
         Review reviewRes = new Review();
         try {
             reviewRes = reviewService.updateSelectedPost(review);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return ResponseEntity.ok(reviewRes);
+    }
+
+    /**
+     * Pageable API for Fetching Reviews based on restaurant Id
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param restaurantId
+     * @return ResponseEntity<ReviewPageDto>
+     */
+    @GetMapping(value = "/fetch-review/{restaurantId}")
+    public  ResponseEntity<ReviewPageDto> getReviewByRestaurantId(@PathVariable(name = "pageNo") int pageNo, @PathVariable(name = "pageSize") int pageSize,@PathVariable(name = "restaurantId") Integer restaurantId ){
+        ReviewPageDto reviewRes = new ReviewPageDto();
+        try {
+            reviewRes = reviewService.fetchReviewByRestaurantId(pageNo,pageSize,restaurantId);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return ResponseEntity.ok(reviewRes);
+    }
+
+    /**
+     * Pageable API for Fetching Reviews based on User Id
+     *
+     * @param userId
+     * @param pageNo
+     * @param pageSize
+     * @return ResponseEntity<ReviewPageDto>
+     */
+    @GetMapping(value = "/fetch-review/{pageNo}/{pageSize}/{userId}")
+    public  ResponseEntity<ReviewPageDto> getReviewByUserId(@PathVariable(name = "pageNo") int pageNo, @PathVariable(name = "pageSize") int pageSize, @PathVariable(name = "userId") Integer userId ){
+        ReviewPageDto reviewRes = new ReviewPageDto();
+        try {
+            reviewRes = reviewService.fetchReviewByUserId(pageNo,pageSize,userId);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return ResponseEntity.ok(reviewRes);
+    }
+
+    /**
+     * API for Fetching Review based on User Id and Restaurant Id
+     *
+     * @param userId
+     * @param restaurantId
+     * @return ResponseEntity<Review>
+     */
+    @GetMapping(value = "/fetch-review/{restaurantId}/{userId}")
+    public  ResponseEntity<Review> getReviewByUserIdAndRestaurantId(@PathVariable(name = "userId") Integer userId, @PathVariable(name = "restaurantId") Integer restaurantId){
+        Review reviewRes = new Review();
+        try {
+            reviewRes = reviewService.fetchReviewByUserIdAndRestaurantId(userId,restaurantId);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

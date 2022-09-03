@@ -1,15 +1,20 @@
 package com.reviewed.review.service;
 
+import com.reviewed.review.dto.ReviewPageDto;
 import com.reviewed.review.model.Review;
 import com.reviewed.review.repository.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -29,7 +34,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review addReview(Review review) {
         Assert.notNull(review,"Review is null");
-        Optional<Review> reviewResponse = reviewRepository.existsByUserIdAndRestaurantId(review.getUserId(),review.getRestaurantId());
+        Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(review.getUserId(),review.getRestaurantId());
         System.out.println(reviewResponse);
         if(reviewResponse.isEmpty()){
             review.setLastUpdatedDateTime(LocalDateTime.now());
@@ -71,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService{
     public String deleteReviewByUserIdAndRestaurantId(Integer userId, Integer restaurantId) {
         Assert.notNull(userId,"User Id is null");
         Assert.notNull(restaurantId, "Restaurant Id is null");
-        Optional<Review> reviewResponse = reviewRepository.existsByUserIdAndRestaurantId(userId,restaurantId);
+        Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(userId,restaurantId);
         try {
             if(reviewResponse.isPresent()){
                 reviewRepository.deleteById(reviewResponse.get().getReviewId());
@@ -85,6 +90,60 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     /**
+     * Service method for fetching reviews for a particular restaurant based on restaurant Id
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param restaurantId
+     * @return ReviewPageDto
+     */
+    @Override
+    public ReviewPageDto fetchReviewByRestaurantId(int pageNo, int pageSize, Integer restaurantId) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Review> reviews = reviewRepository.findAll(pageable);
+        ReviewPageDto reviewPageDto = new ReviewPageDto();
+        reviewPageDto.setContent(reviews.getContent());
+        reviewPageDto.setTotalElements(reviews.getTotalElements());
+        return reviewPageDto;
+    }
+
+    /**
+     * Service method for fetching reviews given by a user based on user Id
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param userId
+     * @return ReviewPageDto
+     */
+    @Override
+    public ReviewPageDto fetchReviewByUserId(int pageNo, int pageSize, Integer userId) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Review> reviews = reviewRepository.findAll(pageable);
+        ReviewPageDto reviewPageDto = new ReviewPageDto();
+        reviewPageDto.setContent(reviews.getContent());
+        reviewPageDto.setTotalElements(reviews.getTotalElements());
+        return reviewPageDto;
+    }
+
+    /**
+     * Service method for fetching reviews for a particular restaurant and a user based on restaurant Id and user Id
+     *
+     * @param userId
+     * @param restaurantId
+     * @return
+     */
+    @Override
+    public Review fetchReviewByUserIdAndRestaurantId(Integer userId, Integer restaurantId) {
+        Assert.notNull(userId, "User Id is null");
+        Assert.notNull(restaurantId, "Restaurant Id is null");
+        Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(userId,restaurantId);
+    if(reviewResponse.isPresent()){
+        return reviewResponse.get();
+    }else
+       throw new RuntimeException("The review for given restaurant id and user id does not exists ");
+    }
+
+    /**
      * Service method for updating a review
      *
      * @param review
@@ -93,7 +152,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review updateSelectedPost(Review review) {
         Assert.notNull(review,"Review is null");
-        Optional<Review> reviewResponse = reviewRepository.existsByUserIdAndRestaurantId(review.getUserId(), review.getRestaurantId());
+        Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(review.getUserId(), review.getRestaurantId());
         if(reviewResponse.isPresent()){
             modelMapper.map(review,reviewResponse);
          return reviewRepository.save(reviewResponse.get());
