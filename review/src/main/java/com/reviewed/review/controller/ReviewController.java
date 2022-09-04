@@ -85,7 +85,7 @@ public class ReviewController {
     }
 
     /**
-     * Pageable API for Fetching Reviews based on restaurant Id
+     * Pageable API for Fetching Reviews based on restaurant id
      *
      * @param pageNo
      * @param pageSize
@@ -110,7 +110,7 @@ public class ReviewController {
     }
 
     /**
-     * Pageable API for Fetching Reviews based on User Id
+     * Pageable API for Fetching Reviews based on User id
      *
      * @param userId
      * @param pageNo
@@ -135,7 +135,7 @@ public class ReviewController {
     }
 
     /**
-     * API for Fetching Review based on User Id and Restaurant Id
+     * API for Fetching Review based on User id and Restaurant id
      *
      * @param userId
      * @param restaurantId

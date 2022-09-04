@@ -10,11 +10,11 @@ import javax.persistence.Embeddable;
 @Setter
 public class Rating {
 
-    private Integer food;
+    private float food;
 
-    private Integer ambience;
+    private float ambience;
 
-    private Integer hygiene;
+    private float hygiene;
 
-    private Integer staffBehaviour;
+    private float staffBehaviour;
 }
