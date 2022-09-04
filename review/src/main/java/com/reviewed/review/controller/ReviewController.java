@@ -1,6 +1,6 @@
 package com.reviewed.review.controller;
 
-import com.reviewed.review.dto.ReviewPageDto;
+import com.reviewed.review.dto.ReviewPageDTO;
 import com.reviewed.review.model.Review;
 import com.reviewed.review.service.ReviewService;
 
@@ -74,10 +74,10 @@ public class ReviewController {
      * @return ResponseEntity<Review>
      */
     @PutMapping(value = "/update-review")
-    public ResponseEntity<Review> updatePostById(@RequestBody Review review) {
+    public ResponseEntity<Review> updateReviewById(@RequestBody Review review) {
         Review reviewRes = new Review();
         try {
-            reviewRes = reviewService.updateSelectedPost(review);
+            reviewRes = reviewService.updateSelectedReview(review);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -94,13 +94,13 @@ public class ReviewController {
      * @return ResponseEntity<ReviewPageDto>
      */
     @GetMapping(value = "/fetch-review/restaurant")
-    public  ResponseEntity<ReviewPageDto> getReviewByRestaurantId(
+    public  ResponseEntity<ReviewPageDTO> getReviewByRestaurantId(
             @RequestParam(required = true) Integer restaurantId,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "25") int pageSize,
             @RequestParam(defaultValue = "lastUpdatedDateTime") String sortField
            ){
-        ReviewPageDto reviewRes = new ReviewPageDto();
+        ReviewPageDTO reviewRes = new ReviewPageDTO();
         try {
             reviewRes = reviewService.fetchReviewByRestaurantId(pageNo,pageSize,sortField,restaurantId);
         }catch (Exception e){
@@ -119,13 +119,13 @@ public class ReviewController {
      * @return ResponseEntity<ReviewPageDto>
      */
     @GetMapping(value = "/fetch-review/user")
-    public  ResponseEntity<ReviewPageDto> getReviewByUserId(
+    public  ResponseEntity<ReviewPageDTO> getReviewByUserId(
             @RequestParam(required = true) Integer userId,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "3") int pageSize,
             @RequestParam(defaultValue = "lastUpdatedDateTime") String sortField
     ){
-        ReviewPageDto reviewRes = new ReviewPageDto();
+        ReviewPageDTO reviewRes = new ReviewPageDTO();
         try {
             reviewRes = reviewService.fetchReviewByUserId(pageNo,pageSize,sortField,userId);
         }catch (Exception e){

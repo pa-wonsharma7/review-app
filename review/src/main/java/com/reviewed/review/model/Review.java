@@ -1,5 +1,6 @@
 package com.reviewed.review.model;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer reviewId;
 
+    @NotNull
     private Integer restaurantId;
 
     private String reviewDescription;
@@ -28,15 +30,9 @@ public class Review {
     @Embedded
     private Rating rating;
 
+    @NotNull
     private Integer userId;
 
     private LocalDateTime lastUpdatedDateTime;
-
-    @Embedded
-    private List<Comment> comment;
-
-    private Integer likes;
-
-    private Integer dislikes;
 
 }

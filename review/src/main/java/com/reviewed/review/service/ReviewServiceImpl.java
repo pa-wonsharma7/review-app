@@ -1,20 +1,15 @@
 package com.reviewed.review.service;
 
-import com.reviewed.review.dto.ReviewPageDto;
+import com.reviewed.review.dto.ReviewPageDTO;
 import com.reviewed.review.model.Review;
 import com.reviewed.review.repository.ReviewRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -22,8 +17,6 @@ public class ReviewServiceImpl implements ReviewService{
     @Autowired
     ReviewRepository reviewRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
 
     /**
      * Service method for adding a new review
@@ -35,12 +28,11 @@ public class ReviewServiceImpl implements ReviewService{
     public Review addReview(Review review) {
         Assert.notNull(review,"Review is null");
         Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(review.getUserId(),review.getRestaurantId());
-        System.out.println(reviewResponse);
         if(reviewResponse.isEmpty()){
             review.setLastUpdatedDateTime(LocalDateTime.now());
            return reviewRepository.save(review);
         }else{
-            throw new RuntimeException("Review already exists");
+            throw new RuntimeException("User has already reviewed this restaurant");
         }
     }
 
@@ -99,11 +91,11 @@ public class ReviewServiceImpl implements ReviewService{
      * @return ReviewPageDto
      */
     @Override
-    public ReviewPageDto fetchReviewByRestaurantId(int pageNo, int pageSize, String sortField, Integer restaurantId) {
+    public ReviewPageDTO fetchReviewByRestaurantId(int pageNo, int pageSize, String sortField, Integer restaurantId) {
         Sort sort = Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Review> reviews = reviewRepository.findByRestaurantId(restaurantId,pageable);
-        ReviewPageDto reviewPageDto = new ReviewPageDto();
+        ReviewPageDTO reviewPageDto = new ReviewPageDTO();
         reviewPageDto.setContent(reviews.getContent());
         reviewPageDto.setTotalElements(reviews.getTotalElements());
         return reviewPageDto;
@@ -120,11 +112,11 @@ public class ReviewServiceImpl implements ReviewService{
      * @return ReviewPageDto
      */
     @Override
-    public ReviewPageDto fetchReviewByUserId(int pageNo, int pageSize, String sortField, Integer userId) {
+    public ReviewPageDTO fetchReviewByUserId(int pageNo, int pageSize, String sortField, Integer userId) {
         Sort sort = Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Review> reviews = reviewRepository.findByUserId(userId,pageable);
-        ReviewPageDto reviewPageDto = new ReviewPageDto();
+        ReviewPageDTO reviewPageDto = new ReviewPageDTO();
         reviewPageDto.setContent(reviews.getContent());
         reviewPageDto.setTotalElements(reviews.getTotalElements());
         return reviewPageDto;
@@ -155,11 +147,14 @@ public class ReviewServiceImpl implements ReviewService{
      * @return Review
      */
     @Override
-    public Review updateSelectedPost(Review review) {
+    public Review updateSelectedReview(Review review) {
         Assert.notNull(review,"Review is null");
         Optional<Review> reviewResponse = reviewRepository.findByUserIdAndRestaurantId(review.getUserId(), review.getRestaurantId());
         if(reviewResponse.isPresent()){
-            modelMapper.map(review,reviewResponse);
+            reviewResponse.get().setReviewId(review.getReviewId());
+            reviewResponse.get().setReviewDescription(review.getReviewDescription());
+            reviewResponse.get().setRating(review.getRating());
+            reviewResponse.get().setLastUpdatedDateTime(LocalDateTime.now());
          return reviewRepository.save(reviewResponse.get());
         }else{
             throw new RuntimeException("Your review does not exist");

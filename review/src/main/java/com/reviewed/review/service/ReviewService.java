@@ -1,9 +1,7 @@
 package com.reviewed.review.service;
 
-import com.reviewed.review.dto.ReviewPageDto;
+import com.reviewed.review.dto.ReviewPageDTO;
 import com.reviewed.review.model.Review;
-
-import java.util.UUID;
 
 public interface ReviewService {
 
@@ -29,7 +27,7 @@ public interface ReviewService {
      * @param review
      * @return Review
      */
-    public Review updateSelectedPost(Review review);
+    public Review updateSelectedReview(Review review);
 
     /**
      *
@@ -50,7 +48,7 @@ public interface ReviewService {
      * @param sortField
      * @return ReviewPageDto
      */
-    public ReviewPageDto fetchReviewByRestaurantId (int pageNo,int pageSize,String sortField, Integer restaurantId);
+    public ReviewPageDTO fetchReviewByRestaurantId (int pageNo, int pageSize, String sortField, Integer restaurantId);
 
     /**
      * Service method for fetching reviews given by a user based on user Id
@@ -61,7 +59,7 @@ public interface ReviewService {
      * @param sortField
      * @return ReviewPageDto
      */
-    public ReviewPageDto fetchReviewByUserId(int pageNo,int pageSize,String sortField, Integer userId);
+    public ReviewPageDTO fetchReviewByUserId(int pageNo, int pageSize, String sortField, Integer userId);
 
     /**
      * Service method for fetching reviews for a particular restaurant and a user based on restaurant Id and user Id

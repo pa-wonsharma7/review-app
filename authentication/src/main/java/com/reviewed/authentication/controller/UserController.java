@@ -34,11 +34,11 @@ public class UserController {
         if(user.getEmailId() !=null && !"".equals(user.getEmailId())){
             Optional<User> userobj = userService.fetchUserByEmailId(user.getEmailId());
             if(userobj.isPresent())
-                throw new RuntimeException("User with " + user.getEmailId() + "already exists");
+                throw new RuntimeException("User with " + user.getEmailId() + " already exists");
         }
         if(user.getUsername() !=null && !"".equals(user.getUsername())){
             if(userService.existsByUserName(user.getUsername()))
-                throw new RuntimeException("Username " + user.getUsername() + "already exists. Try a different one.");
+                throw new RuntimeException("Username " + user.getUsername() + " already exists. Try a different one.");
         }
         User userObj=null;
         userObj= userService.saveUser(user);
